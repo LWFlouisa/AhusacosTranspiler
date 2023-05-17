@@ -44,15 +44,31 @@ module Ahusacos
     rule(:tos)  {  str("tos") }
 
     ## Nouns
-    rule(:noun)        { fr_person | fr_place | fr_thing |
-                         jp_person | jp_place | jp_thing   }
+    rule(:noun)        { fr_person | fr_place | fr_thing | fr_idea |
+                         jp_person | jp_place | jp_thing | jp_idea   }
 
-    rule(:fr_thing)    { fr_aesthetic |    fr_clear |     fr_cold | fr_complex | fr_cottage |
-                         fr_farm      |    fr_heavy | fr_homemade | fr_hot     |  fr_liquid |
-                         fr_loud      | fr_material |   fr_matter | fr_metal   | fr_natural |
-                         fr_physical  |    fr_quiet |    fr_round | fr_rural   |   fr_shiny |
-                         fr_square    |    fr_tools 
-                       }
+    ### French Nouns
+    rule(:fr_person) { homme | femme | garcon | fille | animale }
+    rule(:fr_place)  { fr_exterior | fr_interior }
+
+    rule(:fr_thing)  { fr_aesthetic |    fr_clear |     fr_cold | fr_complex | fr_cottage |
+                       fr_farm      |    fr_heavy | fr_homemade | fr_hot     |  fr_liquid |
+                       fr_loud      | fr_material |   fr_matter | fr_metal   | fr_natural |
+                       fr_physical  |    fr_quiet |    fr_round | fr_rural   |   fr_shiny |
+                       fr_square    |    fr_tools 
+                     }
+
+    rule(:fr_idea)
+
+    ### Japanese Nouns
+    rule(:jp_person)
+    rule(:jp_place)
+    rule(:jp_thing)
+    rule(:jp_idea)
+
+    ## Adjectives
+    rule(:adjective)   { fr_look | fr_smell | fr_feel | fr_taste | fr_sound |
+                         jp_look | jp_smell | jp_feel | jp_taste | jp_sound   }
 
     rule(:preposition) {}
     rule(:verb)        {}
