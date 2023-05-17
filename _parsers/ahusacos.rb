@@ -1,4 +1,3 @@
-## Unfinished
 require "parslet"
 require "naive_bayes"
 
@@ -44,13 +43,25 @@ module Ahusacos
     rule(:tos)  {  str("tos") }
 
     ## Nouns
-    rule(:noun)        { fr_person | fr_place | fr_thing | fr_idea |
-                         jp_person | jp_place | jp_thing | jp_idea   }
+    rule(:noun)        { fr_person | fr_place | fr_thing | jp_person | jp_place | jp_thing }
 
     ### French Nouns
-    rule(:fr_person) { homme | femme | garcon | fille | animale }
+    rule(:fr_person) { fr_man | fr_woman | fr_boy | fr_girl | fr_animal }
+
+    #### Specific French Persons
+    rule(:fr_man)    {   str("homme") }
+    rule(:fr_woman)  {   str("femme") }
+    rule(:fr_boy)    {  str("garcon") }
+    rule(:fr_girl)   {   str("fille") }
+    rule(:fr_animal) { str("animale") }
+
+    #### Specific French Places
     rule(:fr_place)  { fr_exterior | fr_interior }
 
+    rule(:fr_exterior) {  }
+    rule(:fr_interior) {  }
+
+    #### Specific French Things
     rule(:fr_thing)  { fr_aesthetic |    fr_clear |     fr_cold | fr_complex | fr_cottage |
                        fr_farm      |    fr_heavy | fr_homemade | fr_hot     |  fr_liquid |
                        fr_loud      | fr_material |   fr_matter | fr_metal   | fr_natural |
@@ -58,13 +69,23 @@ module Ahusacos
                        fr_square    |    fr_tools 
                      }
 
-    rule(:fr_idea)
+    #rule(:fr_idea) { fr_abstraction | fr_intuition  | fr_serendipity | fr_emotion |
+    #                 fr_imagination | fr_creativity | fr_stories}
 
     ### Japanese Nouns
-    rule(:jp_person)
-    rule(:jp_place)
-    rule(:jp_thing)
-    rule(:jp_idea)
+    rule(:jp_person) { jp_man | jp_woman | jp_boy | jp_girl | jp_animal }
+
+    rule(:jp_place)  { jp_exterior | jp_interior }
+
+    rule(:jp_thing)  { jp_aesthetic |    jp_clear |     jp_cold | jp_complex | jp_cottage |
+                       jp_farm      |    jp_heavy | jp_homemade | jp_hot     |  jp_liquid |
+                       jp_loud      | jp_material |   jp_matter | jp_metal   | jp_natural |
+                       jp_physical  |    jp_quiet |    jp_round | jp_rural   |   jp_shiny |
+                       jp_square    |    jp_tools 
+                     }
+
+    # otoko | josei | otokonoko | onnanoko
+    #rule(:jp_idea)
 
     ## Adjectives
     rule(:adjective)   { fr_look | fr_smell | fr_feel | fr_taste | fr_sound |
