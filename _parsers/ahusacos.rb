@@ -87,20 +87,38 @@ module Ahusacos
     # otoko | josei | otokonoko | onnanoko
     #rule(:jp_idea)
 
-    ## Adjectives
-    rule(:adjective)   { fr_look | fr_smell | fr_feel | fr_taste | fr_sound |
-                         jp_look | jp_smell | jp_feel | jp_taste | jp_sound   }
+    # French Adjectives
+    rule(:fr_adjective) { fr_look | fr_smell | fr_feel | fr_taste | fr_sound }
 
-    rule(:preposition) {}
-    rule(:verb)        {}
-    rule(:adverb)      {}
+    # Japanese Adjectives
+    rule(:jp_adjective) { jp_look | jp_smell | jp_feel | jp_taste | jp_sound }
+
+    # French Preposition 
+    rule(:fr_preposition) { fr_time    |  fr_place |   fr_movement |
+                            fr_manner  |  fr_agent | fr_instrument | 
+                            fr_measure | fr_source |  fr_posession   }
+
+    # Japanese Preposition
+    rule(:jp_preposition) { jp_time    |  jp_place |   jp_movement |
+                            jp_manner  |  jp_agent | jp_instrument |
+                            jp_measure | jp_source |  jp_posession   }
+
+    # French Verbs
+    rule(:fr_verb) {}
+
+    # Japanese Verbs
+    rule(:jp_verb) {}
+
+    rule(:fr_adverb) {}
+
+    rule(:jp_adverb) ()
   end
 
   class AhusacosTransform < Parslet::Transform
   end
 
-  class AhusacosBaysian
-    def self.track_tokens
+  class AhusacosXML
+    def self.convert_to_xml
     end
   end
 end
