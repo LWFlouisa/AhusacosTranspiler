@@ -208,4 +208,28 @@ module AhusacosLite
     rule(:question)    { "?" }
     rule(:full_stop)   { "." }
   end
+    
+  class AhusacosLite
+    def self.get_input
+      begin
+        print "Ahusacos("
+        system("date")
+        print ") >> "; input = gets.chomp # .split(" ")
+
+        parser      = SearchParser.new
+        transform   = SearchTransform.new
+
+        tree        = parser.parse(input)
+        ast         = transform.apply(tree)
+        ast_output = "#{ast}".to_s
+
+        $search_query = "#{ast_output}"
+
+        # SmartSearch::SearchQuery.convert_query
+        # SmartSearch::SearchQuery.is_present?
+      rescue Parslet::ParseFailed => error
+        puts error.parse_failure_cause.ascii_tree
+      end
+    end
+  end
 end
