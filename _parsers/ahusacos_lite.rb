@@ -1,15 +1,21 @@
 require "parslet"
 
+require 'humanist_errors'
+include HumanistErrors
+
 module AhusacosLite
   class AhusacosParser < Parslet::Parser
     root(:grammar)
+
+    rule(:space) { str(" ") }
 
     rule(:grammar) { gender_marker    >> space >>
                      noun_marker      >> space >>
                      adjective_marker >> space >>
                      conju_marker     >> space >>
                      verb_marker      >> space >>
-                     adverb_marker    >> punc_marker
+                     adverb_marker    >> space >>
+                     punc_marker                  }
 
     # Markers
     rule(:gender_marker) {   anu |   ana |  anos }
@@ -104,9 +110,7 @@ module AhusacosLite
     rule(:regle)   {   str("regle") }
     rule(:bondoru) { str("bondoru") }
 
-    rule(:adverb_marker) {     vite | hente | mute | drole | pedecise |
-                           vivemeje |  keta | dusa 
-    }
+    rule(:adverb_marker) { vite | hente | mute | drole | pedecise | vivemeje |  keta | dusa }
 
     rule(:vite)     {       str("vite") }
     rule(:hente)    {      str("hente") }
@@ -124,7 +128,6 @@ module AhusacosLite
   end
 
   class AhusacosTransform < Parslet::Transform
-
     # Gender
     rule(:anu)  {  "Anu" }
     rule(:ana)  {  "Ana" }
@@ -189,10 +192,10 @@ module AhusacosLite
     rule(:sore) { "sore" }
 
     # Verbs
-    rule(:avoir)   {   str("avoir") }
-    rule(:lit)     {     str("lit") }
-    rule(:regle)   {   str("regle") }
-    rule(:bondoru) { str("bondoru") }
+    rule(:avoir)   {   "avoir" }
+    rule(:lit)     {     "lit" }
+    rule(:regle)   {   "regle" }
+    rule(:bondoru) { "bondoru" }
 
     # Adverbs
     rule(:vite)     {       "vite" }
@@ -208,22 +211,44 @@ module AhusacosLite
     rule(:question)    { "?" }
     rule(:full_stop)   { "." }
   end
-    
-  class AhusacosLite
+
+  class Ahusacos
+
     def self.get_input
       begin
-        print "Ahusacos("
-        system("date")
-        print ") >> "; input = gets.chomp # .split(" ")
+        print "Ahusacos() >> "; input = gets.chomp # .split(" ")
 
-        parser      = SearchParser.new
-        transform   = SearchTransform.new
+        parser      = AhusacosParser.new
+        transform   = AhusacosTransform.new
 
         tree        = parser.parse(input)
         ast         = transform.apply(tree)
         ast_output = "#{ast}".to_s
 
-        $search_query = "#{ast_output}"
+        search_query = "#{ast_output}".split(" ")
+
+        gender      = search_query[0]
+        noun        = search_query[1]
+        adjective   = search_query[2]
+        conjucation = search_query[3]
+        verb        = search_query[4]
+        adverb      = search_query[5]
+        punctuation = search_query[6]
+
+        open("test.xml", "w") { |f|
+          f.puts "<grammar context='BIANCA'>
+  <phrase>
+    <gender>#{gender}</gender>
+    <noun>#{noun}</noun>
+    <adjective>#{adjective}</adjective>
+    <conjucation>#{conjucation}</conjucation>
+    <verb>#{verb}</verb>
+    <adverb>#{adverb}</adverb>
+    <punctuation>#{punctuation}</punctuation>
+  </phrase>
+</grammar>
+          "
+        }
 
         # SmartSearch::SearchQuery.convert_query
         # SmartSearch::SearchQuery.is_present?
@@ -231,5 +256,9 @@ module AhusacosLite
         puts error.parse_failure_cause.ascii_tree
       end
     end
+
   end
 end
+
+## Process for getting input
+AhusacosLite::Ahusacos.get_input
