@@ -18,26 +18,57 @@ module AhusacosLite
                      punc_marker                  }
 
     # Markers
-    rule(:gender_marker) {   anu |   ana |  anos }
+    rule(:gender_marker) {    le |    la |  lez |  un |  une |  dez |
+                             anu |   ana | anos |  tu |   ta |  tos |
+                             der |   die |  das |   a |  ein | lanu |
+                            lana | lanos |  tun | tan | deso
+    }
 
+    # French Word Genders
+    rule(:le)   {   str("Le") }
+    rule(:la)   {   str("La") }
+    rule(:lez)  {  str("Lez") }
+    rule(:un)   {   str("Un") }
+    rule(:une)  {  str("Une") }
+    rule(:dez)  {  str("Dez") }
+
+    # Japanese Word Genders
     rule(:anu)  {  str("Anu") }
     rule(:ana)  {  str("Ana") }
     rule(:anos) { str("Anos") }
+    rule(:tu)   {   str("Tu") }
+    rule(:ta)   {   str("Ta") }
+    rule(:tos)  {  str("Tos") }
+
+    # Alsatian Word Genders
+    rule(:der) { str("Der") }
+    rule(:die) { str("Die") }
+    rule(:das) { str("Das") }
+    rule(:a)   {   str("A") }
+    rule(:ein) { str("Ein") }
+
+    # Hybrid Word Genders
+    rule(:lanu)  {  str("Lanu") }
+    rule(:lana)  {  str("Lana") }
+    rule(:lanos) { str("Lanos") }
+    rule(:tun)   {   str("Tun") }
+    rule(:tan)   {   str("Tan") }
+    rule(:deso)  {  str("Deso") }
 
     rule(:noun_marker)   {  hito | basho |  mono }
 
     rule(:hito)  { homme | josei | otokonoko | fille }
     
-    rule(:homme)     {     str("homme") }
-    rule(:josei)     {     str("josei") }
-    rule(:otokonoko) { str("otokonoko") }
-    rule(:fille)     {     str("fille") }
+    rule(:homme)     {     str("homme") } # Man
+    rule(:josei)     {     str("josei") } # Woman
+    rule(:otokonoko) { str("otokonoko") } # Boy
+    rule(:fille)     {     str("fille") } # Girl
 
     rule(:basho) { america | france | japan }
 
-    rule(:america) { str("Amerique") }
-    rule(:france)  {   str("France") }
-    rule(:japan)   {    str("Nipon") }
+    rule(:america) { str("Amerique") } # American
+    rule(:france)  {   str("France") } # French
+    rule(:japan)   {    str("Nipon") } # Japanese
 
     rule(:mono)  {    maizon | cabine | demeure |  zigner |  autobus |
                        ecole |    buz |    cour | abrikos |    anker |
@@ -98,27 +129,27 @@ module AhusacosLite
 
     rule(:conju_marker)  {  mata | to |  itsu | sore }
 
-    rule(:mata) { str("mata") }
-    rule(:to)   {   str("to") }
-    rule(:itsu) { str("itsu") }
-    rule(:sore) { str("sore") }
+    rule(:mata) { str("mata") } # Or
+    rule(:to)   {   str("to") } # And
+    rule(:itsu) { str("itsu") } # When
+    rule(:sore) { str("sore") } # That
 
     rule(:verb_marker)   { avoir |   lit | regle | bondoru }
 
-    rule(:avoir)   {   str("avoir") }
-    rule(:lit)     {     str("lit") }
-    rule(:regle)   {   str("regle") }
-    rule(:bondoru) { str("bondoru") }
+    rule(:avoir)   {   str("avoir") } # Have   > To retrieve a thing by git or wget.
+    rule(:lit)     {     str("lit") } # Read   > To read a program.
+    rule(:regle)   {   str("regle") } # Adjust > To adjust something.
+    rule(:bondoru) { str("bondoru") } # Bundle > To package something.
 
     rule(:adverb_marker) { vite | hente | mute | drole | pedecise | vivemeje |  keta | dusa }
 
-    rule(:vite)     {       str("vite") }
-    rule(:hente)    {      str("hente") }
-    rule(:mute)     {       str("mute") }
-    rule(:drole)    {      str("drole") }
-    rule(:pedecise) {   str("pedecise") }
-    rule(:vivemeje) {   str("vivemeje") }
-    rule(:keta)     { str("ketasuzejo") }
+    rule(:vite)     {       str("vite") } # Swiftly
+    rule(:hente)    {      str("hente") } # Slowly
+    rule(:mute)     {       str("mute") } # Quietly
+    rule(:drole)    {      str("drole") } # Funnilly, Oddly
+    rule(:pedecise) {   str("pedecise") } # Precisely
+    rule(:vivemeje) {   str("vivemeje") } # Briskly
+    rule(:keta)     { str("ketasuzejo") } # Decisely
     rule(:dusa)     {       str("dusa") }
 
     rule(:punc_marker)   { question | full_stop }
@@ -225,6 +256,8 @@ module AhusacosLite
         ast         = transform.apply(tree)
         ast_output = "#{ast}".to_s
 
+        system("espeak -p 95 '#{ast_output}'")
+
         search_query = "#{ast_output}".split(" ")
 
         gender      = search_query[0]
@@ -235,8 +268,7 @@ module AhusacosLite
         adverb      = search_query[5]
         punctuation = search_query[6]
 
-        open("test.xml", "w") { |f|
-          f.puts "<grammar context='BIANCA'>
+        parsed_xml = "<grammar context='BIANCA'>
   <phrase>
     <gender>#{gender}</gender>
     <noun>#{noun}</noun>
@@ -246,8 +278,10 @@ module AhusacosLite
     <adverb>#{adverb}</adverb>
     <punctuation>#{punctuation}</punctuation>
   </phrase>
-</grammar>
-          "
+</grammar>"
+
+        open("test.xml", "w") { |f|
+          f.puts parsed_xml
         }
 
         # SmartSearch::SearchQuery.convert_query
