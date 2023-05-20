@@ -3,7 +3,7 @@ require "parslet"
 require 'humanist_errors'
 include HumanistErrors
 
-module AhusacosLite
+module AhusacosCorpus
   class AhusacosParser < Parslet::Parser
     root(:grammar)
 
@@ -266,7 +266,7 @@ module AhusacosLite
           f.puts $search_query
         }
 
-        AhusacosLite::Ahusacos.ahusacos_saver
+        AhusacosCorpus::Ahusacos.ahusacos_saver
       rescue Parslet::ParseFailed => error
         puts error.parse_failure_cause.ascii_tree
       end
