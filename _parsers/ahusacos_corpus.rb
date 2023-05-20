@@ -304,7 +304,7 @@ module AhusacosLite
       a.train(:likely_nonsense, "#{adjective }#{gender} #{noun} #{verb} #{conjucation} #{adverb} #{verb}#{punctuation}", "word")   
 
       ## Definitely Nonsense
-      a.train(:definitely_nonsense, "#{conjucation} #{verb} #{adverb}#{gender} #{adjective} #{noun}#{punctuation}", "word")
+      a.train(:definitely_nonsense, "#{conjucation} #{verb} #{adverb} #{gender} #{adjective} #{noun}#{punctuation}", "word")
 
       ## Save Data for later.
       a.save
