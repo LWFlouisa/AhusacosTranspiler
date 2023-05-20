@@ -273,10 +273,8 @@ module AhusacosLite
         parsed_aiml = "<?xml version = '1.0' encoding = 'UTF-8'?>
 <aiml version = '1.0.1' encoding = 'UTF-8'>
   <category>
-    <pattern>I want you to ask Phind for this specific query.</pattern>
-    <template>
-      <system>espeak 'I see how it is!'; cd _brains/phind; ruby search_query.rb</system>
-    </template>
+    <pattern>Can you tell me something in your native tungue?.</pattern>
+    <template>#{gender} #{noun} #{adjective} #{conjucation} #{verb} #{adverb}#{punctuation}</template>
   </category>
 <aiml>"
 
