@@ -280,7 +280,7 @@ module AhusacosLite
   </phrase>
 </grammar>"
 
-        open("test.xml", "w") { |f|
+        open("_xml/grammar.xml", "w") { |f|
           f.puts parsed_xml
         }
 
