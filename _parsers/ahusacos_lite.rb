@@ -293,6 +293,3 @@ module AhusacosLite
 
   end
 end
-
-## Process for getting input
-AhusacosLite::Ahusacos.get_input
